@@ -1,31 +1,28 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net"
-)
 
-//  "waltermiller.ca/revolver/protos/user"
-
-import (
 	"google.golang.org/grpc"
 	pb "proto/user"
 )
 
 var (
-	port = flag.Int("port", 50051, "The server port")
+	port = flag.Int("port", 50055, "The server port")
 )
 
 type server struct {
-	pb.UnimplementedUserServiceServer
+	pb.UnimplementedUserServer
 }
 
 // stub password login
 func (s *server) PasswordLogin(ctx context.Context, in *pb.PasswordLoginRequest) (*pb.LoginReply, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.LoginReply{Message: "Hello " + in.GetName()}, nil
+	log.Printf("Received: %v, %v", in.GetEmail(), in.GetPassword())
+	return &pb.LoginReply{Email: "sample@example.com", UserId: "1", Token: "abcdef", Expiry: "2025-01-01"}, nil
 }
 
 func StartServer() *grpc.Server {
@@ -35,7 +32,7 @@ func StartServer() *grpc.Server {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterUserServiceServer(s, &server{})
+	pb.RegisterUserServer(s, &server{})
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
@@ -44,5 +41,5 @@ func StartServer() *grpc.Server {
 }
 
 func main() {
-	server.StartServer()
+	StartServer()
 }
