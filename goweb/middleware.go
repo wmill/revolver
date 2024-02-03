@@ -1,20 +1,13 @@
 package main
 
 import (
-	"log"
-	"os"
-
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 
-func installMiddleware(app *fiber.App) {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		log.Fatal("JWT_SECRET is not set")
-	
-	}
+func startRequireJWT(app *fiber.App) {
+	config := GetConfig()
 	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: secret},
+		SigningKey: jwtware.SigningKey{Key: config.JwtSecret},
 	}))
 }

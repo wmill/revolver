@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	user_v1 "proto/gen/go/user/v1"
-	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,6 +22,8 @@ func main() {
 	if err != nil {
     log.Fatal("Error loading .env file")
   }
+
+	LoadConfig()
 	
 	fmt.Println("loaded env var:" + os.Getenv("USER_SERV_GRPC"))
 	
@@ -36,14 +37,21 @@ func main() {
 		return c.JSON(fiber.Map{"token": token})
 	})
 
+
+	startRequireJWT(app)
+
+	// routes after this middleware require a valid jwt
+
+
+
 	app.Listen(":3000")
 }
 
 
 func loginUser(email string, password string) (string, error) {
-	addr := os.Getenv("USER_SERV_GRPC")
+	config := GetConfig()
 
-	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(config.UserServGrpc, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return "", err
 	}
@@ -59,25 +67,16 @@ func loginUser(email string, password string) (string, error) {
 		return "", err
 	}
 
-	expirationHours, err := strconv.Atoi(os.Getenv("JWT_EXPIRATION_HOURS"))
-	if err != nil {
-		log.Fatal("JWT_EXPIRATION_HOURS is not set")
-	}
-
 	claims := jwt.MapClaims{
 		"email": r.GetEmail(),
 		"admin": r.GetAdmin(),
 		"userId": r.GetUserId(),
-		"exp": time.Now().Add(time.Hour * time.Duration(expirationHours)).Unix(),
+		"exp": time.Now().Add(time.Hour * config.JwtExpiration).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		log.Fatal("JWT_SECRET is not set")
-	}
 
-	t, err := token.SignedString([]byte(secret))
+	t, err := token.SignedString([]byte(config.JwtSecret))
 	if err != nil {
 			return "", err
 	}
