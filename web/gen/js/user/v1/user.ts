@@ -38,13 +38,9 @@ export interface PasswordLoginResponse {
      */
     userId: string;
     /**
-     * @generated from protobuf field: string token = 3;
+     * @generated from protobuf field: bool admin = 3;
      */
-    token: string;
-    /**
-     * @generated from protobuf field: string expiry = 4;
-     */
-    expiry: string;
+    admin: boolean;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class PasswordLoginRequest$Type extends MessageType<PasswordLoginRequest> {
@@ -106,12 +102,11 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
         super("user.v1.PasswordLoginResponse", [
             { no: 1, name: "email", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "token", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "expiry", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 3, name: "admin", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<PasswordLoginResponse>): PasswordLoginResponse {
-        const message = { email: "", userId: "", token: "", expiry: "" };
+        const message = { email: "", userId: "", admin: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<PasswordLoginResponse>(this, message, value);
@@ -128,11 +123,8 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
                 case /* string user_id */ 2:
                     message.userId = reader.string();
                     break;
-                case /* string token */ 3:
-                    message.token = reader.string();
-                    break;
-                case /* string expiry */ 4:
-                    message.expiry = reader.string();
+                case /* bool admin */ 3:
+                    message.admin = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -152,12 +144,9 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
         /* string user_id = 2; */
         if (message.userId !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.userId);
-        /* string token = 3; */
-        if (message.token !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.token);
-        /* string expiry = 4; */
-        if (message.expiry !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.expiry);
+        /* bool admin = 3; */
+        if (message.admin !== false)
+            writer.tag(3, WireType.Varint).bool(message.admin);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

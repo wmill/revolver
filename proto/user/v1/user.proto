@@ -15,6 +15,5 @@ message PasswordLoginRequest {
 message PasswordLoginResponse {
   string email = 1;
   string user_id = 2;
-  string token = 3;
-  string expiry = 4;
+  bool admin = 3;
 }

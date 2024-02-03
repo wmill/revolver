@@ -7,8 +7,9 @@ import (
 	"log"
 	"net"
 
-	"google.golang.org/grpc"
 	pb "proto/gen/go/user/v1"
+
+	"google.golang.org/grpc"
 )
 
 var (
@@ -22,7 +23,7 @@ type server struct {
 // stub password login
 func (s *server) PasswordLogin(ctx context.Context, in *pb.PasswordLoginRequest) (*pb.PasswordLoginResponse, error) {
 	log.Printf("Received: %v, %v", in.GetEmail(), in.GetPassword())
-	return &pb.PasswordLoginResponse{Email: "sample@example.com", UserId: "1", Token: "abcdef", Expiry: "2025-01-01"}, nil
+	return &pb.PasswordLoginResponse{Email: "sample@example.com", UserId: "1", Admin: false}, nil
 }
 
 func StartServer() *grpc.Server {
