@@ -26,8 +26,11 @@ func main() {
 	LoadConfig()
 	
 	fmt.Println("loaded env var:" + os.Getenv("USER_SERV_GRPC"))
+
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
 	
-	app.Post("/login", func(c *fiber.Ctx) error {
+	v1.Post("/login", func(c *fiber.Ctx) error {
 		email := c.FormValue("email")
 		password := c.FormValue("password")
 		token, err := loginUser(email, password)
@@ -44,7 +47,7 @@ func main() {
 
 
 
-	app.Listen(":3000")
+	app.Listen(":" + GetConfig().Port)
 }
 
 
