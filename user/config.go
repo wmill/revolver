@@ -10,13 +10,13 @@ import (
 
 
 type Config struct {
-	UserDbHost string
-	UserDbPort int
-	UserDbUser string
-	UserDbPass string
-	UserDbName string
-	DbSSLMode  string
-	Port			 int
+	UserDbHost string `env:"USER_DB_HOST"`
+	UserDbPort int    `env:"USER_DB_PORT"`
+	UserDbUser string `env:"USER_DB_USER"`
+	UserDbPass string `env:"USER_DB_PASSWORD"`
+	UserDbName string `env:"USER_DB_NAME"`
+	DbSSLMode  string `env:"DB_SSL_MODE"`
+	Port			 int 	  `env:"PORT"`
 }
 
 var globalConfig Config
@@ -71,3 +71,5 @@ func LoadConfig() {
 func GetConfig() Config {
 	return globalConfig
 }
+
+

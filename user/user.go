@@ -11,13 +11,14 @@ func (s *server) UserCreate(ctx context.Context, in *pb.UserCreateRequest) (*pb.
 	out := new(pb.UserCreateResponse)
 	hashedPassword, err := HashPassword(in.GetPassword())
 	if err != nil {
-		log.Fatal("Hashing error", err)
+		log.Printf("Hashing error: %s", err)
 	}
 	org_id := 1
 	var id int;
 	err = GetDbConn().QueryRow("INSERT INTO users (email, password_hash, admin, org_id) VALUES ($1, $2, $3, $4) RETURNING id", in.GetEmail(), hashedPassword, in.GetAdmin(), org_id).Scan(&id)
 	if err != nil {
-		log.Fatal("Insert error", err)
+		log.Printf("Insert error: %s", err)
+		return nil, err
 	}
 	out.Admin = false
 	out.Email = in.GetEmail()
