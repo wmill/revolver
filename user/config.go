@@ -1,22 +1,22 @@
 package main
 
 import (
+	"context"
 	"log"
-	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/sethvargo/go-envconfig"
 )
 
 
 type Config struct {
-	UserDbHost string `env:"USER_DB_HOST"`
-	UserDbPort int    `env:"USER_DB_PORT"`
-	UserDbUser string `env:"USER_DB_USER"`
-	UserDbPass string `env:"USER_DB_PASSWORD"`
-	UserDbName string `env:"USER_DB_NAME"`
-	DbSSLMode  string `env:"DB_SSL_MODE"`
-	Port			 int 	  `env:"PORT"`
+	UserDbHost string `env:"USER_DB_HOST, required"`
+	UserDbPort int    `env:"USER_DB_PORT, required"`
+	UserDbUser string `env:"USER_DB_USER, required"`
+	UserDbPass string `env:"USER_DB_PASSWORD, required"`
+	UserDbName string `env:"USER_DB_NAME, required"`
+	DbSSLMode  string `env:"DB_SSL_MODE, required"`
+	Port       int 	  `env:"PORT, required"`
 }
 
 var globalConfig Config
@@ -24,48 +24,14 @@ var globalConfig Config
 func LoadConfig() {
 
 	err := godotenv.Load()
-
 	if err != nil {
-    log.Fatal("Error loading .env file")
+    log.Fatal(err)
   }
-	
-	userDbHost := os.Getenv("USER_DB_HOST")
-	if userDbHost == "" {
-		log.Fatal("USER_DB_HOST is not set")
-	}
-	userDbPort, err := strconv.Atoi(os.Getenv("USER_DB_PORT"))
+	ctx := context.Background()
+	err = envconfig.Process(ctx, &globalConfig)
 	if err != nil {
-		log.Fatal("USER_DB_PORT is not set")
-	}
-	userDbUser := os.Getenv("USER_DB_USER")
-	if userDbUser == "" {
-		log.Fatal("USER_DB_USER is not set")
-	}
-	userDbPass := os.Getenv("USER_DB_PASSWORD")
-	if userDbPass == "" {
-		log.Fatal("USER_DB_PASSWORD is not set")
-	}
-	userDbName := os.Getenv("USER_DB_NAME")
-	if userDbName == "" {
-		log.Fatal("USER_DB_NAME is not set")
-	}
-	dbSSLMode := os.Getenv("DB_SSL_MODE")
-	if userDbName == "" {
-		log.Fatal("DB_SSL_MODE is not set")
-	}
-	port, err := strconv.Atoi(os.Getenv("PORT"))
-	if err != nil {
-		log.Fatal("PORT is not set")
-	}
-	globalConfig = Config{
-		UserDbHost: userDbHost,
-		UserDbPort: userDbPort,
-		UserDbUser: userDbUser,
-		UserDbPass: userDbPass,
-		UserDbName: userDbName,
-		DbSSLMode: dbSSLMode,
-		Port: port,
-	}
+    log.Fatal(err)
+  }
 }
 
 func GetConfig() Config {
