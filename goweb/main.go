@@ -74,7 +74,7 @@ func loginUser(email string, password string) (string, error) {
 		"email": r.GetEmail(),
 		"admin": r.GetAdmin(),
 		"userId": r.GetUserId(),
-		"exp": time.Now().Add(time.Hour * config.JwtExpiration).Unix(),
+		"exp": time.Now().Add(config.JwtExpiration).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
