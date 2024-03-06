@@ -1,44 +1,33 @@
 package main
 
 import (
+	"context"
 	"log"
-	"os"
-	"strconv"
 	"time"
+
+	"github.com/joho/godotenv"
+	"github.com/sethvargo/go-envconfig"
 )
 
 type Config struct {
-	UserServGrpc  string
-	JwtSecret     string
-	JwtExpiration time.Duration
-	Port					string
+	UserServGrpc  string `env:"USER_SERV_GRPC, required"`
+	JwtSecret     string `env:"JWT_SECRET, required"`
+	JwtExpiration time.Duration `env:"JWT_EXPIRATION_HOURS, required"`
+	Port					string `env:"PORT, required"`
 }
 
 var globalConfig Config
 
 func LoadConfig() {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		log.Fatal("JWT_SECRET is not set")
-	}
-	userServGrpc := os.Getenv("USER_SERV_GRPC")
-	if userServGrpc == "" {
-		log.Fatal("USER_SERV_GRPC is not set")
-	}
-	jwtExpiration, err := strconv.Atoi(os.Getenv("JWT_EXPIRATION_HOURS"))
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("JWT_EXPIRATION_HOURS is not set")
-	}
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("PORT is not set")
-	}
-	globalConfig = Config{
-		UserServGrpc:  userServGrpc,
-		JwtSecret:     secret,
-		JwtExpiration: time.Duration(jwtExpiration),
-		Port: port,
-	}
+    log.Fatal(err)
+  }
+	ctx := context.Background()
+	err = envconfig.Process(ctx, &globalConfig)
+	if err != nil {
+    log.Fatal(err)
+  }
 }
 
 func GetConfig() Config {
