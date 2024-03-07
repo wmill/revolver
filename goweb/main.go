@@ -12,7 +12,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -34,8 +36,15 @@ func main() {
 		email := c.FormValue("email")
 		password := c.FormValue("password")
 		token, err := loginUser(email, password)
+		
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+			st, ok := status.FromError(err)
+			if ok && st.Code() == codes.PermissionDenied {
+				return c.Status(403).JSON(fiber.Map{"error": "Invalid email or password"})//fmt.Errorf("Invalid email or password")
+			} else {
+				return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+			}
+			
 		}
 		return c.JSON(fiber.Map{"token": token})
 	})

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net"
@@ -16,11 +15,7 @@ type server struct {
 	pb.UnimplementedUserServiceServer
 }
 
-// stub password login
-func (s *server) PasswordLogin(ctx context.Context, in *pb.PasswordLoginRequest) (*pb.PasswordLoginResponse, error) {
-	log.Printf("Received: %v, %v", in.GetEmail(), in.GetPassword())
-	return &pb.PasswordLoginResponse{Email: "sample@example.com", UserId: "1", Admin: false}, nil
-}
+
 
 func StartServer() *grpc.Server {
 	config := GetConfig()
