@@ -1,28 +1,47 @@
 version: '3.8'
-
 services:
-
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
+  db:
+    image: postgres:14.1-alpine
     restart: always
-
-  postgres:
-    image: postgres:16.1
-    # command: ["postgres", "-c", "log_statement=all"]
-    # uncomment this if u wanna output all SQL queries to the console
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
-      - 5432:5432
-    # environment:
-    #   POSTGRES_DB: mydatabase
-    #   POSTGRES_USER: myuser
-    #   POSTGRES_PASSWORD: mypassword
-    restart: always
-
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+      - ./dockerfiles/user_dump.sql:/docker-entrypoint-initdb.d/init.sql
+  goweb:
+    build: 
+      context: .
+      dockerfile: dockerfiles/WebDockerfile
+    ports:
+      - '3001:3001'
+    environment:
+      USER_SERV_GRPC: user:50055
+      JWT_SECRET: 80023b32850d760e786f0957b13fdc6cf2b96e9b5afb397752607f533725672e
+      JWT_EXPIRATION_HOURS: 72h
+      PORT: 3001
+    # volumes:
+    #   - ./.volumes/web:/app
+  user:
+    build: 
+      context: .
+      dockerfile: dockerfiles/UserDockerfile
+    ports:
+      - '50055:50055'
+    environment:
+      USER_DB_HOST: db
+      USER_DB_PORT: 5432
+      USER_DB_USER: postgres
+      USER_DB_PASSWORD: postgres
+      USER_DB_NAME: user
+      DB_SSL_MODE: disable
+      PORT: 50055
+    depends_on:
+      - db
+    # volumes:
+    #   - ./.volumes/user:/app
 volumes:
-  postgres_data:
+  db:
+    driver: local

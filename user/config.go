@@ -25,7 +25,7 @@ func LoadConfig() {
 
 	err := godotenv.Load()
 	if err != nil {
-    log.Fatal(err)
+    log.Print(err)
   }
 	ctx := context.Background()
 	err = envconfig.Process(ctx, &globalConfig)
