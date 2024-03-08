@@ -38,13 +38,51 @@ export interface PasswordLoginResponse {
      */
     userId: string;
     /**
-     * @generated from protobuf field: string token = 3;
+     * @generated from protobuf field: bool admin = 3;
      */
-    token: string;
+    admin: boolean;
+}
+/**
+ * @generated from protobuf message user.v1.UserCreateRequest
+ */
+export interface UserCreateRequest {
     /**
-     * @generated from protobuf field: string expiry = 4;
+     * @generated from protobuf field: string email = 1;
      */
-    expiry: string;
+    email: string;
+    /**
+     * @generated from protobuf field: string password = 2;
+     */
+    password: string;
+    /**
+     * @generated from protobuf field: string first_name = 3;
+     */
+    firstName: string;
+    /**
+     * @generated from protobuf field: string last_name = 4;
+     */
+    lastName: string;
+    /**
+     * @generated from protobuf field: bool admin = 5;
+     */
+    admin: boolean;
+}
+/**
+ * @generated from protobuf message user.v1.UserCreateResponse
+ */
+export interface UserCreateResponse {
+    /**
+     * @generated from protobuf field: string email = 1;
+     */
+    email: string;
+    /**
+     * @generated from protobuf field: string user_id = 2;
+     */
+    userId: string;
+    /**
+     * @generated from protobuf field: bool admin = 3;
+     */
+    admin: boolean;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class PasswordLoginRequest$Type extends MessageType<PasswordLoginRequest> {
@@ -106,12 +144,11 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
         super("user.v1.PasswordLoginResponse", [
             { no: 1, name: "email", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "token", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "expiry", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 3, name: "admin", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<PasswordLoginResponse>): PasswordLoginResponse {
-        const message = { email: "", userId: "", token: "", expiry: "" };
+        const message = { email: "", userId: "", admin: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<PasswordLoginResponse>(this, message, value);
@@ -128,11 +165,8 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
                 case /* string user_id */ 2:
                     message.userId = reader.string();
                     break;
-                case /* string token */ 3:
-                    message.token = reader.string();
-                    break;
-                case /* string expiry */ 4:
-                    message.expiry = reader.string();
+                case /* bool admin */ 3:
+                    message.admin = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -152,12 +186,9 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
         /* string user_id = 2; */
         if (message.userId !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.userId);
-        /* string token = 3; */
-        if (message.token !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.token);
-        /* string expiry = 4; */
-        if (message.expiry !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.expiry);
+        /* bool admin = 3; */
+        if (message.admin !== false)
+            writer.tag(3, WireType.Varint).bool(message.admin);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -168,9 +199,146 @@ class PasswordLoginResponse$Type extends MessageType<PasswordLoginResponse> {
  * @generated MessageType for protobuf message user.v1.PasswordLoginResponse
  */
 export const PasswordLoginResponse = new PasswordLoginResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UserCreateRequest$Type extends MessageType<UserCreateRequest> {
+    constructor() {
+        super("user.v1.UserCreateRequest", [
+            { no: 1, name: "email", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "password", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "first_name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "last_name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "admin", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<UserCreateRequest>): UserCreateRequest {
+        const message = { email: "", password: "", firstName: "", lastName: "", admin: false };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<UserCreateRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UserCreateRequest): UserCreateRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string email */ 1:
+                    message.email = reader.string();
+                    break;
+                case /* string password */ 2:
+                    message.password = reader.string();
+                    break;
+                case /* string first_name */ 3:
+                    message.firstName = reader.string();
+                    break;
+                case /* string last_name */ 4:
+                    message.lastName = reader.string();
+                    break;
+                case /* bool admin */ 5:
+                    message.admin = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UserCreateRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string email = 1; */
+        if (message.email !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.email);
+        /* string password = 2; */
+        if (message.password !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.password);
+        /* string first_name = 3; */
+        if (message.firstName !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.firstName);
+        /* string last_name = 4; */
+        if (message.lastName !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.lastName);
+        /* bool admin = 5; */
+        if (message.admin !== false)
+            writer.tag(5, WireType.Varint).bool(message.admin);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message user.v1.UserCreateRequest
+ */
+export const UserCreateRequest = new UserCreateRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UserCreateResponse$Type extends MessageType<UserCreateResponse> {
+    constructor() {
+        super("user.v1.UserCreateResponse", [
+            { no: 1, name: "email", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "user_id", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "admin", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<UserCreateResponse>): UserCreateResponse {
+        const message = { email: "", userId: "", admin: false };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<UserCreateResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UserCreateResponse): UserCreateResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string email */ 1:
+                    message.email = reader.string();
+                    break;
+                case /* string user_id */ 2:
+                    message.userId = reader.string();
+                    break;
+                case /* bool admin */ 3:
+                    message.admin = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UserCreateResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string email = 1; */
+        if (message.email !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.email);
+        /* string user_id = 2; */
+        if (message.userId !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.userId);
+        /* bool admin = 3; */
+        if (message.admin !== false)
+            writer.tag(3, WireType.Varint).bool(message.admin);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message user.v1.UserCreateResponse
+ */
+export const UserCreateResponse = new UserCreateResponse$Type();
 /**
  * @generated ServiceType for protobuf service user.v1.UserService
  */
 export const UserService = new ServiceType("user.v1.UserService", [
-    { name: "PasswordLogin", options: {}, I: PasswordLoginRequest, O: PasswordLoginResponse }
+    { name: "PasswordLogin", options: {}, I: PasswordLoginRequest, O: PasswordLoginResponse },
+    { name: "UserCreate", options: {}, I: UserCreateRequest, O: UserCreateResponse }
 ]);

@@ -1,0 +1,13 @@
+# Start a new stage from scratch
+FROM alpine:latest
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+COPY ./bin/user ./
+COPY ./user/.env ./
+
+# Expose port 50055 to the outside world
+EXPOSE 50055
+
+# Command to run the executable
+CMD ["./user"]

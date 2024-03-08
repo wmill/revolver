@@ -1,33 +1,25 @@
 package main
 
 import (
-	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net"
 
-	"google.golang.org/grpc"
 	pb "proto/gen/go/user/v1"
+
+	"google.golang.org/grpc"
 )
 
-var (
-	port = flag.Int("port", 50055, "The server port")
-)
 
 type server struct {
 	pb.UnimplementedUserServiceServer
 }
 
-// stub password login
-func (s *server) PasswordLogin(ctx context.Context, in *pb.PasswordLoginRequest) (*pb.PasswordLoginResponse, error) {
-	log.Printf("Received: %v, %v", in.GetEmail(), in.GetPassword())
-	return &pb.PasswordLoginResponse{Email: "sample@example.com", UserId: "1", Token: "abcdef", Expiry: "2025-01-01"}, nil
-}
+
 
 func StartServer() *grpc.Server {
-	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	config := GetConfig()
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -41,5 +33,8 @@ func StartServer() *grpc.Server {
 }
 
 func main() {
+	LoadConfig()
+	ConnectToDb()
+
 	StartServer()
 }

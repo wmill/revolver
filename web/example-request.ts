@@ -1,16 +1,22 @@
 
 import {ChannelCredentials} from "@grpc/grpc-js";
 import {GrpcTransport} from "@protobuf-ts/grpc-transport";
-// import {ExampleServiceClient, IExampleServiceClient} from "./service-example.client";
-// import {ExampleRequest, FailRequest} from "./service-example";
-
 import {UserServiceClient} from "./gen/js/user/v1/user.client";
 
-let transport = new TwirpFetchTransport({
-    baseUrl: "localhost:4000"
+let transport = new GrpcTransport({
+    host: "localhost:50055",
+    channelCredentials: ChannelCredentials.createInsecure(),
 });
 
-let client = new HaberdasherClient(transport);
+let client = new UserServiceClient(transport);
 
-let {response} = await client.makeHat({ inches: 11 });
-console.log("got a small hat! " + response)
+const getResponse = async () => {
+    let {response} = await client.passwordLogin({
+        email: "test@example.com",
+        password: "password"
+    });
+    console.log("got a response! ", response)
+
+}
+
+getResponse().catch(e => console.error(e));
