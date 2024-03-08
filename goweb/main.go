@@ -40,7 +40,7 @@ func main() {
 		if err != nil {
 			st, ok := status.FromError(err)
 			if ok && st.Code() == codes.PermissionDenied {
-				return c.Status(403).JSON(fiber.Map{"error": "Invalid email or password"})//fmt.Errorf("Invalid email or password")
+				return c.Status(403).JSON(fiber.Map{"error": "Invalid email or password"})
 			} else {
 				return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 			}

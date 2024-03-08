@@ -34,21 +34,15 @@ func (s *server) PasswordLogin(ctx context.Context, in *pb.PasswordLoginRequest)
 	var id int
 	var email string
 	var admin bool
-	var hashedPassword string
-	// hashedPassword, err := HashPassword(in.GetPassword())
-	// if err != nil {
-	// 	log.Printf("Hashing error: %s", err)
-	// 	return nil, err
-	// }
-	err := GetDbConn().QueryRow("SELECT id, email, admin, password_hash FROM users WHERE email = $1", in.GetEmail()).Scan(&id, &email, &admin, &hashedPassword)
+	var password_hash string
+	err := GetDbConn().QueryRow("SELECT id, email, admin, password_hash FROM users WHERE email = $1", in.GetEmail()).Scan(&id, &email, &admin, &password_hash)
 	if err != nil {
 		log.Printf("Query error: %s", err)
 		return nil, err
 	}
-	if !CheckPasswordHash(in.GetPassword(), hashedPassword) {
+	if !CheckPasswordHash(in.GetPassword(), password_hash) {
 		log.Printf("Invalid password")
 		return &pb.PasswordLoginResponse{}, status.Errorf(codes.PermissionDenied,"Invalid password")
 	}
 	return &pb.PasswordLoginResponse{Email: email, UserId: fmt.Sprint(id), Admin: admin}, nil
-	// return &pb.PasswordLoginResponse{Email: "sample@example.com", UserId: "1", Admin: false}, nil
 }
