@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   db:
-    image: postgres:14.1-alpine
+    image: postgres:16.2
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -9,8 +9,8 @@ services:
     ports:
       - '5432:5432'
     volumes: 
-      - db:/var/lib/postgresql/data
       - ./dockerfiles/user_dump.sql:/docker-entrypoint-initdb.d/init.sql
+      - db:/var/lib/postgresql/data
   goweb:
     build: 
       context: .

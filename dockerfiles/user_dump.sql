@@ -44,6 +44,7 @@ SET row_security = off;
 
 -- *not* creating schema, since initdb creates it
 
+CREATE USER userservice WITH PASSWORD 'userservice';
 
 ALTER SCHEMA public OWNER TO postgres;
 
