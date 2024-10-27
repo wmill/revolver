@@ -8,16 +8,11 @@ plugins:
     opt:
       - paths=source_relative
       - require_unimplemented_servers=false
-#  - plugin: js
-#    out: ../web/gen/js
-#    opt: import_style=commonjs,binary
-#  - plugin: ts
-#    out: ../web/gen/js
-  - name: ts
+  - plugin: es
+    out: ../next-frontend/gen/js
     opt:
-      - long_type_string
-    #path: ../node_modules/.bin/protoc-gen-ts
-    strategy: all
-    out: ../web/gen/js
-#    js_out: ../web/gen/js
-#    ts_out: ../web/gen/js
+      - target=ts
+  - plugin: connect-es
+    out: ../next-frontend/gen/js
+    opt:
+      - target=ts
