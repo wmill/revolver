@@ -1,6 +1,6 @@
 module revolver
 
-go 1.19
+go 1.22
 
 require (
 	github.com/gofiber/contrib/jwt v1.0.8
