@@ -15,6 +15,7 @@ import { BaseLayout } from '@/components/BaseLayout/BaseLayout';
 // };
 
 export default function RootLayout({ children }: { children: any }) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: { children: any }) {
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
         />
       </head>
-      <body>
+      <body className="w-screen">
         <SessionProvider>
           <MantineProvider theme={theme}>
             <BaseLayout>{children}</BaseLayout>

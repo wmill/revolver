@@ -29,6 +29,10 @@ const handler = NextAuth({
   pages: {
     signIn: '/login',
   },
+  theme: {
+    colorScheme: "dark",
+  },
+
 });
 
 export { handler as GET, handler as POST };

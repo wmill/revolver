@@ -9,7 +9,7 @@ export function MainPanel({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className={`w-screen min-h-screen absolute bg-[var(--mantine-color-body)] drop-shadow-md transition-transform duration-5000 ease-in-out ${panelOpen ? 'translate-x-64' : ''}`}>
+    <div className={`left-glow w-screen min-h-screen absolute bg-[var(--mantine-color-body)] drop-shadow-md transition-transform duration-5000 ease-in-out ${panelOpen ? 'translate-x-64' : ''}`}>
       <TopBar togglePanel={togglePanel} />
       <div>
         {children}

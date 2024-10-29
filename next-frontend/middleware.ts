@@ -15,6 +15,9 @@ export default withAuth(
     pages: {
       signIn: "/login",
     },
+    theme: {
+      colorScheme: "dark",
+    },
   }
 )
 
