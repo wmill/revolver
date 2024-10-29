@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "analyze": "ANALYZE=true next build",
     "start": "next start",
@@ -19,6 +19,7 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.2.1",
     "@mantine/core": "7.13.4",
     "@mantine/hooks": "7.13.4",
     "@next/bundle-analyzer": "^14.2.4",

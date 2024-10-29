@@ -1,16 +1,36 @@
-
 'use client';
 
+import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Implement login logic here
-    console.log('Login attempt with:', { email, password });
+    setError('');
+
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError('Invalid credentials');
+        return;
+      }
+
+      router.push('/'); // Redirect to home page after successful login
+      router.refresh();
+    } catch (err) {
+      setError(`An error occurred during sign in: ${err}`);
+    }
   };
 
   return (
@@ -19,6 +39,11 @@ export default function LoginPage() {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Log in to your account
         </h2>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
