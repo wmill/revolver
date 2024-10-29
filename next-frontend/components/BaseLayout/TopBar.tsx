@@ -1,5 +1,7 @@
-export function TopBar() {
+import { Button } from '@mantine/core';
+
+export function TopBar({ togglePanel }: { togglePanel: (e: React.MouseEvent) => void }) {
   return (
-    <div>Top Bar</div>
-  )
+    <div><Button onClick={togglePanel}>(*)</Button>Top Bar</div>
+  );
 }
